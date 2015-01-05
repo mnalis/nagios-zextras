@@ -1,4 +1,8 @@
 #!/usr/bin/perl
+# Matija Nalis <malis-perl@axe.tomsoft.hr> GPLv3+, started 20150105
+#
+# nagios check for xzsuite licence expiration and available version updates
+#
 
 use warnings;
 use strict;
@@ -7,6 +11,9 @@ use feature 'say';
 
 use lib '/usr/lib/nagios/plugins';
 use utils qw /%ERRORS/;
+
+my $VERSION = '1.0';
+# FIXME help window, version, commandline parsing for warning/critical
 
 my $CMD_CHECK_UPDATE = 'cat example/zimbra_update_check.txt';
 my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
@@ -20,8 +27,7 @@ my $NAGIOS_STATUS = 'OK';
 sub update_status($$) {
     my ($level, $msg) = @_;
     $NAGIOS_STATUS = $level if $ERRORS{$level} > $ERRORS{$NAGIOS_STATUS};	# things can only can go from bad to worse, not the other way around
-    my $extra = ''; $extra = ', ' if $NAGIOS_ERR;
-    $NAGIOS_ERR .= $extra . $msg;
+    $NAGIOS_ERR = "$msg, $NAGIOS_ERR";
 }
 
 #
@@ -90,7 +96,29 @@ while (<$cmd_lic>) {
     }
 }
 
+#
+# only critical status allowed below this line (and warnings above)
+#
 
+# check submodule quantities
+foreach my $k (grep {/__quantity/} keys %LIC) {
+    next if ($LIC{$k} eq 'unlimited');
+    update_status ('CRITICAL', "$k=$LIC{$k} > $LIC{'licensedUsers'}") if $LIC{$k} > $LIC{'licensedUsers'};
+}
+
+# check submodule licenses
+foreach my $k (grep {/__licensed/} keys %LIC) {
+    update_status ('CRITICAL', "$k=$LIC{$k}") if $LIC{$k} ne 'true';
+}
+
+# global checks
+update_status('CRITICAL', "isWithinGraceInterval=$LIC{'isWithinGraceInterval'}") if $LIC{'isWithinGraceInterval'} ne 'false';
+update_status('CRITICAL', "Expired=$LIC{'expired'}") if $LIC{'expired'} ne 'false';
+update_status('CRITICAL', "notYetValid=$LIC{'notYetValid'}") if $LIC{'notYetValid'} ne 'false';
+update_status('CRITICAL', "accountCount=$LIC{'accountCount'} > $LIC{'licensedUsers'}") if $LIC{'accountCount'} > $LIC{'licensedUsers'};
+$NAGIOS_EXTRA .= ", accountCount=$LIC{'accountCount'}/$LIC{'licensedUsers'}, dateStart=$LIC{'dateStart'}, dateEnd=$LIC{'dateEnd'}";
+
+$NAGIOS_ERR =~ s/, $//;
 print "$NAGIOS_STATUS";
 print ": $NAGIOS_ERR" if $NAGIOS_ERR;
 print "|$NAGIOS_EXTRA" if $NAGIOS_EXTRA;
