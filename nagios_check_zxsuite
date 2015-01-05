@@ -23,8 +23,10 @@ my $VERSION = '1.01';
 my $DAYS_CRIT = 14;
 my $DAYS_WARN = 30;
 
-my $CMD_CHECK_UPDATE = 'cat example/zimbra_update_check.txt';
-my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
+#my $CMD_CHECK_UPDATE = 'cat example/zimbra_update_check.txt';
+#my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
+my $CMD_CHECK_UPDATE = 'sudo -u zimbra -i zxsuite core doCheckUpdate';
+my $CMD_CHECK_LICENSE = 'sudo -u zimbra -i zxsuite core getLicenseInfo';
 
 my $NAGIOS_EXTRA = '';
 my $NAGIOS_ERR = '';

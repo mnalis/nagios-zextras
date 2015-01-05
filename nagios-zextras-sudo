@@ -1,0 +1,3 @@
+# for /usr/lib/nagios/plugins/nagios_check_zxsuite
+
+nagios	zimbra = (zimbra) /opt/zimbra/bin/zxsuite
