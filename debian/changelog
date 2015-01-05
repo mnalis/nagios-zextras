@@ -1,3 +1,29 @@
+nagios-zextras (1.05) wheezy; urgency=low
+
+  * NRPE config
+  * sudoers for whole script
+  * PATH added
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Tue, 06 Jan 2015 00:21:52 +0100
+
+nagios-zextras (1.04) wheezy; urgency=low
+
+  * fix sudoers file
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Tue, 06 Jan 2015 00:11:39 +0100
+
+nagios-zextras (1.03) wheezy; urgency=low
+
+  * zxsuite path add
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Mon, 05 Jan 2015 23:44:21 +0100
+
+nagios-zextras (1.02) wheezy; urgency=low
+
+  * fix sudoers file
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Mon, 05 Jan 2015 23:22:29 +0100
+
 nagios-zextras (1.01) unstable; urgency=low
 
   * Initial release

@@ -18,15 +18,16 @@ use lib '/usr/lib/nagios/plugins';
 use utils qw /%ERRORS/;
 
 
-my $VERSION = '1.01';
+my $VERSION = '1.05';
 # FIXME help window, version, commandline parsing for warning/critical
 my $DAYS_CRIT = 14;
 my $DAYS_WARN = 30;
 
+$ENV{PATH} .= ':/opt/zimbra/bin';
 #my $CMD_CHECK_UPDATE = 'cat example/zimbra_update_check.txt';
 #my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
-my $CMD_CHECK_UPDATE = 'sudo -u zimbra -i zxsuite core doCheckUpdate';
-my $CMD_CHECK_LICENSE = 'sudo -u zimbra -i zxsuite core getLicenseInfo';
+my $CMD_CHECK_UPDATE = 'zxsuite core doCheckUpdate';
+my $CMD_CHECK_LICENSE = 'zxsuite core getLicenseInfo';
 
 my $NAGIOS_EXTRA = '';
 my $NAGIOS_ERR = '';
