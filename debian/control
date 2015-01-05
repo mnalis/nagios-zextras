@@ -1,5 +1,5 @@
 Source: nagios-zextras
-Section: unknown
+Section: net
 Priority: extra
 Maintainer: Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>
 Build-Depends: debhelper (>= 8.0.0)
@@ -7,7 +7,7 @@ Standards-Version: 3.9.3
 #Homepage: <insert the upstream URL, if relevant>
 #Vcs-Git: git://git.debian.org/collab-maint/nagios-zextras.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/nagios-zextras.git;a=summary
-Files: nagios-zextras-sudo /etc/sudoers.d
+
 Package: nagios-zextras
 Architecture: all
 Depends: ${misc:Depends}, libtimedate-perl, nagios-plugins-basic, sudo
