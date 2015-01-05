@@ -1,0 +1,35 @@
+
+        dateStart                                           2014-12-09 01:00:00 CET
+        dateEnd                                             2015-02-01 00:59:59 CET
+        expired                                             false
+        type                                                Purchased
+        customer                                            Tomsoft d.o.o.
+        reseller                                            true
+        company                                             Tomsoft d.o.o. (Private)
+        order_id                                            9275
+        accountCount                                        39
+        resourceCount                                       6
+        licensedUsers                                       40
+        notYetValid                                         false
+        isWithinGraceInterval                               false
+        modules                                 
+            ZxBackup                                
+                quantity                                                    40
+                licensed                                                    true
+            ZxMobile                                
+                quantity                                                    40
+                licensed                                                    true
+            ZxAdmin                                 
+                quantity                                                    40
+                licensed                                                    true
+            ZxChat                                  
+                quantity                                                    unlimited
+                licensed                                                    true
+            ZxPowerstore                            
+                quantity                                                    40
+                licensed                                                    true
+                enabledOnNE                                                 false
+        serverID                                            42944fae-f5dd-4c04-af72-251ffa9518b4
+        canRemoveChatBrand                                  true
+
+

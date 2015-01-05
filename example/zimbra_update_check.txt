@@ -1,0 +1,11 @@
+
+        currentVersion                                      1.10.1
+        currentCommit                                       3441446ac7c333aeab45c74246f32a43ef022530
+        availableVersion                                    1.10.2
+        availableCommit                                     0000000000000000000000000000000000000000
+        lastUpdate                                          2015-01-05 16:23:32 CET
+        zxchatZimletCurrentVersion                          1.22
+        zxchatZimletAvailableVersion                        1.23
+        minCoreVersion                                      1.8.13
+
+
