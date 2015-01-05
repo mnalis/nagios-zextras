@@ -3,5 +3,55 @@
 use warnings;
 use strict;
 use autodie;
-
 use feature 'say';
+
+use lib '/usr/lib/nagios/plugins';
+use utils qw /%ERRORS/;
+
+my $CMD_CHECK_UPDATE = 'cat example/zimbra_update_check.txt';
+my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
+
+my $NAGIOS_EXTRA = '';
+my $NAGIOS_ERR = '';
+my $NAGIOS_STATUS = 0;
+
+
+# updates nagios status
+sub update_status($$) {
+    my ($level, $msg) = @_;
+    $NAGIOS_STATUS = $ERRORS{$level} if $ERRORS{$level} > $NAGIOS_STATUS;	# things can only can go from bad to worse, not the other way around
+    my $extra = ''; $extra = ', ' if $NAGIOS_ERR;
+    $NAGIOS_ERR .= $extra . $msg;
+}
+
+# check for updates
+my %Z = ();
+open my $cmd_update, '-|', $CMD_CHECK_UPDATE;
+while (<$cmd_update>) {
+    next if /^\s*$/;
+    chomp;
+    my ($key, $value) = split (' ', $_, 2);
+    $key =~ s/current/Current/;		# fix case so it is always mixed
+    $key =~ s/available/Available/;
+#    say "  key $key = $value";
+    $Z{$key} = $value;
+}
+
+
+$NAGIOS_EXTRA .= "lastUpdate: $Z{'lastUpdate'}";
+
+# list all current versions
+foreach my $cur (grep {/CurrentVersion/} keys %Z) {
+    my $avail = $cur; 
+    $avail =~ s/Current/Available/;
+    
+    if (!defined($Z{$avail})) { die "can't find available_ counterpart to current key $cur" }
+    if ($Z{$cur} ne $Z{$avail}) {
+            update_status ('WARNING', "Update $avail: $Z{$avail}");
+    }
+    $NAGIOS_EXTRA .= ", $cur=$Z{$cur} => $avail=$Z{$avail}";
+    
+#    say "current $cur = $Z{$cur} => $avail = $Z{$avail}";
+}
+
+say "status=$NAGIOS_STATUS, msg=$NAGIOS_ERR, extra=$NAGIOS_EXTRA";
