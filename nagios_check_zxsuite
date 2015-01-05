@@ -24,11 +24,13 @@ sub update_status($$) {
     $NAGIOS_ERR .= $extra . $msg;
 }
 
+#
 # check for updates
+#
 my %Z = ();
 open my $cmd_update, '-|', $CMD_CHECK_UPDATE;
 while (<$cmd_update>) {
-    next if /^\s*$/;
+    next if /^\s*$/;	# skip empty lines
     chomp;
     my ($key, $value) = split (' ', $_, 2);
     $key =~ s/current/Current/;		# fix case so it is always mixed
@@ -40,8 +42,7 @@ while (<$cmd_update>) {
 
 $NAGIOS_EXTRA .= "lastUpdate: $Z{'lastUpdate'}";
 
-# list all current versions
-foreach my $cur (grep {/CurrentVersion/} keys %Z) {
+foreach my $cur (grep {/CurrentVersion/} keys %Z) {	# list all current versions
     my $avail = $cur; 
     $avail =~ s/Current/Available/;
     
@@ -53,6 +54,38 @@ foreach my $cur (grep {/CurrentVersion/} keys %Z) {
     
 #    say "current $cur = $Z{$cur} => $avail = $Z{$avail}";
 }
+
+#
+# check licenses
+#
+
+open my $cmd_lic, '-|', $CMD_CHECK_LICENSE;
+my $module = '';
+my $m_spaces = '__NEVERHAPPENS__';
+while (<$cmd_lic>) {
+    next if /^\s*$/;	# skip empty lines
+    chomp;
+        
+    say "  lic $_";
+    
+    if (/^$m_spaces\S/) {
+        say 'detected modules end';
+        $module = '';
+        $m_spaces = '__NEVERHAPPENS__';
+    } elsif (/^(\s+)modules\s*$/) {
+        $m_spaces = $1;
+        say 'detected modules start';
+    }
+    
+    
+    my ($key, $value) = split (' ', $_, 2);
+    if ($value eq '') {
+        say "value not defined for key=$key, assume module name";
+        $module = $key;
+    }
+#    say "\t\t\t$key = $value";
+}
+
 
 print "$NAGIOS_STATUS";
 print ": $NAGIOS_ERR" if $NAGIOS_ERR;
