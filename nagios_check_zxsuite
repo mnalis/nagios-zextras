@@ -4,6 +4,9 @@
 # nagios check for xzsuite licence expiration and available version updates
 #
 # it requires nagios util.pm and module Date::Parse
+#
+# you should also add nagios to /etc/sudoers for required commands, like:
+# FIXME sudoers(5) example
 
 use warnings;
 use strict;
@@ -147,4 +150,6 @@ print "$NAGIOS_STATUS";
 print ": $NAGIOS_ERR" if $NAGIOS_ERR;
 print "|$NAGIOS_EXTRA" if $NAGIOS_EXTRA;
 print "\n";
+
 exit $ERRORS{$NAGIOS_STATUS};
+
