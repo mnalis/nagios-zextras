@@ -59,6 +59,7 @@ foreach my $cur (grep {/CurrentVersion/} keys %Z) {	# list all current versions
 # check licenses
 #
 
+my %LIC = ();
 open my $cmd_lic, '-|', $CMD_CHECK_LICENSE;
 my $module = '';
 my $m_spaces = '__NEVERHAPPENS__';
@@ -66,24 +67,27 @@ while (<$cmd_lic>) {
     next if /^\s*$/;	# skip empty lines
     chomp;
         
-    say "  lic $_";
+#    say "  lic $_";
     
     if (/^$m_spaces\S/) {
-        say 'detected modules end';
+        #say 'detected modules end';
         $module = '';
         $m_spaces = '__NEVERHAPPENS__';
     } elsif (/^(\s+)modules\s*$/) {
         $m_spaces = $1;
-        say 'detected modules start';
+       #say 'detected modules start';
     }
     
     
     my ($key, $value) = split (' ', $_, 2);
     if ($value eq '') {
-        say "value not defined for key=$key, assume module name";
+        #say "value not defined for key=$key, assume module name";
         $module = $key;
+    } else {
+        my $fullkey = ($module?"${module}__":'') . $key;
+        $LIC{$fullkey} = $value;
+        say "\t$fullkey = $value";
     }
-#    say "\t\t\t$key = $value";
 }
 
 
