@@ -13,13 +13,13 @@ my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
 
 my $NAGIOS_EXTRA = '';
 my $NAGIOS_ERR = '';
-my $NAGIOS_STATUS = 0;
+my $NAGIOS_STATUS = 'OK';
 
 
 # updates nagios status
 sub update_status($$) {
     my ($level, $msg) = @_;
-    $NAGIOS_STATUS = $ERRORS{$level} if $ERRORS{$level} > $NAGIOS_STATUS;	# things can only can go from bad to worse, not the other way around
+    $NAGIOS_STATUS = $level if $ERRORS{$level} > $ERRORS{$NAGIOS_STATUS};	# things can only can go from bad to worse, not the other way around
     my $extra = ''; $extra = ', ' if $NAGIOS_ERR;
     $NAGIOS_ERR .= $extra . $msg;
 }
@@ -49,9 +49,13 @@ foreach my $cur (grep {/CurrentVersion/} keys %Z) {
     if ($Z{$cur} ne $Z{$avail}) {
             update_status ('WARNING', "Update $avail: $Z{$avail}");
     }
-    $NAGIOS_EXTRA .= ", $cur=$Z{$cur} => $avail=$Z{$avail}";
+    $NAGIOS_EXTRA .= ", $cur: $Z{$cur} => $Z{$avail}";
     
 #    say "current $cur = $Z{$cur} => $avail = $Z{$avail}";
 }
 
-say "status=$NAGIOS_STATUS, msg=$NAGIOS_ERR, extra=$NAGIOS_EXTRA";
+print "$NAGIOS_STATUS";
+print ": $NAGIOS_ERR" if $NAGIOS_ERR;
+print "|$NAGIOS_EXTRA" if $NAGIOS_EXTRA;
+print "\n";
+exit $ERRORS{$NAGIOS_STATUS};
