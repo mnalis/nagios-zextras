@@ -3,17 +3,22 @@
 #
 # nagios check for xzsuite licence expiration and available version updates
 #
+# it requires nagios util.pm and module Date::Parse
 
 use warnings;
 use strict;
 use autodie;
 use feature 'say';
 
+use Date::Parse;
 use lib '/usr/lib/nagios/plugins';
 use utils qw /%ERRORS/;
 
-my $VERSION = '1.0';
+
+my $VERSION = '1.01';
 # FIXME help window, version, commandline parsing for warning/critical
+my $DAYS_CRIT = 14;
+my $DAYS_WARN = 30;
 
 my $CMD_CHECK_UPDATE = 'cat example/zimbra_update_check.txt';
 my $CMD_CHECK_LICENSE = 'cat example/zimbra_licence.txt';
@@ -26,6 +31,7 @@ my $NAGIOS_STATUS = 'OK';
 # updates nagios status
 sub update_status($$) {
     my ($level, $msg) = @_;
+    if (!defined $ERRORS{$level}) { die "cannot access nagios ERRORS for level=$level" }
     $NAGIOS_STATUS = $level if $ERRORS{$level} > $ERRORS{$NAGIOS_STATUS};	# things can only can go from bad to worse, not the other way around
     $NAGIOS_ERR = "$msg, $NAGIOS_ERR";
 }
@@ -92,13 +98,28 @@ while (<$cmd_lic>) {
     } else {
         my $fullkey = ($module?"${module}__":'') . $key;
         $LIC{$fullkey} = $value;
-        say "\t$fullkey = $value";
+        #say "\t$fullkey = $value";
     }
 }
 
 #
 # only critical status allowed below this line (and warnings above)
 #
+
+# license expire check
+my $now = time();
+my $end = str2time($LIC{'dateEnd'});
+if (!defined($LIC{'dateEnd'})) {
+    update_status('UNKNOWN', "cannot determine licence end date from $LIC{'dateEnd'}");
+} else {
+    my $days = int (($end - $now) / (24*60*60));
+    #say "$days days remaining";
+    if ($days <= $DAYS_CRIT) {
+        update_status('CRITICAL', "License expires in $days days");
+    } elsif ($days <= $DAYS_WARN) {
+        update_status('WARNING', "License expires in $days days");
+    }
+}
 
 # check submodule quantities
 foreach my $k (grep {/__quantity/} keys %LIC) {
@@ -111,13 +132,16 @@ foreach my $k (grep {/__licensed/} keys %LIC) {
     update_status ('CRITICAL', "$k=$LIC{$k}") if $LIC{$k} ne 'true';
 }
 
-# global checks
 update_status('CRITICAL', "isWithinGraceInterval=$LIC{'isWithinGraceInterval'}") if $LIC{'isWithinGraceInterval'} ne 'false';
 update_status('CRITICAL', "Expired=$LIC{'expired'}") if $LIC{'expired'} ne 'false';
 update_status('CRITICAL', "notYetValid=$LIC{'notYetValid'}") if $LIC{'notYetValid'} ne 'false';
 update_status('CRITICAL', "accountCount=$LIC{'accountCount'} > $LIC{'licensedUsers'}") if $LIC{'accountCount'} > $LIC{'licensedUsers'};
+
 $NAGIOS_EXTRA .= ", accountCount=$LIC{'accountCount'}/$LIC{'licensedUsers'}, dateStart=$LIC{'dateStart'}, dateEnd=$LIC{'dateEnd'}";
 
+
+
+# finish, exit with calculated status and info
 $NAGIOS_ERR =~ s/, $//;
 print "$NAGIOS_STATUS";
 print ": $NAGIOS_ERR" if $NAGIOS_ERR;
