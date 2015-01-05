@@ -18,7 +18,7 @@ use lib '/usr/lib/nagios/plugins';
 use utils qw /%ERRORS/;
 
 
-my $VERSION = '1.05';
+my $VERSION = '1.06';
 # FIXME help window, version, commandline parsing for warning/critical
 my $DAYS_CRIT = 14;
 my $DAYS_WARN = 30;
