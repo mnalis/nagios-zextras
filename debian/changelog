@@ -1,3 +1,15 @@
+nagios-zextras (1.08) wheezy; urgency=low
+
+  * ignore 'none' as available version
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Mon, 26 Jan 2015 21:52:16 +0100
+
+nagios-zextras (1.07) wheezy; urgency=low
+
+  * fix nrpe.cfg and add docs
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Tue, 06 Jan 2015 00:38:57 +0100
+
 nagios-zextras (1.06) wheezy; urgency=low
 
   * restart NRPE on upg

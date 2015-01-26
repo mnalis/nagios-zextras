@@ -12,9 +12,13 @@ install_bin:
 	
 install_etc:	
 	test -d  $(DESTDIR)/etc/sudoers.d || install -o root -g root -m 0755 -d $(DESTDIR)/etc/sudoers.d
-	install -o root -g root -m 0644 nagios-zextras-sudo  $(DESTDIR)/etc/sudoers.d/nagios-zextras
+	install -o root -g root -m 0644 sudo.cfg  $(DESTDIR)/etc/sudoers.d/nagios-zextras
 	test -d  $(DESTDIR)/etc/nagios/nrpe.d || install -o root -g root -m 0755 -d $(DESTDIR)/etc/nagios/nrpe.d
 	install -o root -g root -m 0644 nrpe.cfg $(DESTDIR)/etc/nagios/nrpe.d/nagios_check_zxsuite.cfg
 	
 clean:
 	find . -name "*~" -print0 | xargs -0r rm -f --
+
+debclean: clean
+	fakeroot ./debian/rules clean
+	

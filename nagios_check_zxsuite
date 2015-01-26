@@ -6,7 +6,10 @@
 # it requires nagios util.pm and module Date::Parse
 #
 # you should also add nagios to /etc/sudoers for required commands, like:
-# FIXME sudoers(5) example
+# nagios ALL = (zimbra) NOPASSWD:/usr/lib/nagios/plugins/nagios_check_zxsuite
+# and then run it in nagios NRPE check as:
+# command[check_zxsuite]=sudo -u zimbra  /usr/lib/nagios/plugins/nagios_check_zxsuite
+
 
 use warnings;
 use strict;
@@ -18,7 +21,7 @@ use lib '/usr/lib/nagios/plugins';
 use utils qw /%ERRORS/;
 
 
-my $VERSION = '1.06';
+my $VERSION = '1.08';
 # FIXME help window, version, commandline parsing for warning/critical
 my $DAYS_CRIT = 14;
 my $DAYS_WARN = 30;
@@ -65,7 +68,7 @@ foreach my $cur (grep {/CurrentVersion/} keys %Z) {	# list all current versions
     $avail =~ s/Current/Available/;
     
     if (!defined($Z{$avail})) { die "can't find available_ counterpart to current key $cur" }
-    if ($Z{$cur} ne $Z{$avail}) {
+    if ($Z{$cur} ne $Z{$avail} and $Z{$avail} ne 'none') {
             update_status ('WARNING', "Update $avail: $Z{$avail}");
     }
     $NAGIOS_EXTRA .= ", $cur: $Z{$cur} => $Z{$avail}";
