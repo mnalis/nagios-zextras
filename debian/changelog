@@ -1,8 +1,8 @@
-nagios-zextras (1.11) wheezy; urgency=medium
+nagios-zextras (1.12) wheezy; urgency=medium
 
-  * bump version
+  * use invoke-rc.d --quiet, as nagios-nrpe-server is only suggested
 
- -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Wed, 31 May 2023 06:53:21 +0200
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Wed, 31 May 2023 07:03:04 +0200
 
 nagios-zextras (1.10) wheezy; urgency=medium
 
