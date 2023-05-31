@@ -10,9 +10,9 @@ Standards-Version: 3.9.3
 
 Package: nagios-zextras
 Architecture: all
-Depends: ${misc:Depends}, libtimedate-perl, nagios-plugins-basic, sudo
-Suggests: nagios3 | nagios-nrpe-server
-Enhances: nagios-plugins-basic
+Depends: ${misc:Depends}, libtimedate-perl, monitoring-plugins-basic | nagios-plugins-basic, sudo, tomsoft-sysv | tomsoft-broken-systemd
+Suggests: nagios-nrpe-server | icinga
+Enhances: monitoring-plugins-basic
 Description: Zimbra zextras license and update checks
  will use 'zxsuite core getLicenseInfo' and 'zxsuite core doCheckUpdate'
  to check number of licences, expiration date, if updates are available etc.

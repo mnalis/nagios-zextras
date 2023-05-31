@@ -1,3 +1,9 @@
+nagios-zextras (1.09) wheezy; urgency=medium
+
+  * try adding systemd support
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Wed, 31 May 2023 05:38:15 +0200
+
 nagios-zextras (1.08) wheezy; urgency=low
 
   * ignore 'none' as available version
