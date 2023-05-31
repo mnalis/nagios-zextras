@@ -1,3 +1,10 @@
+nagios-zextras (1.10) wheezy; urgency=medium
+
+  * debian compat, standards upgrades
+  * add missing perl depends
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Wed, 31 May 2023 06:51:19 +0200
+
 nagios-zextras (1.09) wheezy; urgency=medium
 
   * try adding systemd support

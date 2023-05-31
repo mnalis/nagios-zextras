@@ -2,15 +2,15 @@ Source: nagios-zextras
 Section: net
 Priority: extra
 Maintainer: Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>
-Build-Depends: debhelper (>= 8.0.0)
-Standards-Version: 3.9.3
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.5.1
 #Homepage: <insert the upstream URL, if relevant>
 #Vcs-Git: git://git.debian.org/collab-maint/nagios-zextras.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/nagios-zextras.git;a=summary
 
 Package: nagios-zextras
 Architecture: all
-Depends: ${misc:Depends}, libtimedate-perl, monitoring-plugins-basic | nagios-plugins-basic, sudo, tomsoft-sysv | tomsoft-broken-systemd
+Depends: ${misc:Depends},  ${perl:Depends}, libtimedate-perl, monitoring-plugins-basic | nagios-plugins-basic, sudo, tomsoft-sysv | tomsoft-broken-systemd
 Suggests: nagios-nrpe-server | icinga
 Enhances: monitoring-plugins-basic
 Description: Zimbra zextras license and update checks
