@@ -4,3 +4,4 @@ debian/files
 debian/nagios-zextras.debhelper.log
 debian/nagios-zextras.substvars
 debian/nagios-zextras/
+debian/debhelper-build-stamp
