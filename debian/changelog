@@ -1,3 +1,9 @@
+nagios-zextras (1.11) wheezy; urgency=medium
+
+  * bump version
+
+ -- Matija Nalis (Tomsoft Debian repo) <mnalis-debian@axe.tomsoft.hr>  Wed, 31 May 2023 06:53:21 +0200
+
 nagios-zextras (1.10) wheezy; urgency=medium
 
   * debian compat, standards upgrades
